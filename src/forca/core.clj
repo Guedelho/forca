@@ -3,6 +3,8 @@
 
 (def total-de-vidas 6)
 
+(def palavra-secreta "MELANCIA")
+
 (defn le-letra! [] (read-line))
 
 (defn perdeu [] (print "Você perdeu"))
@@ -17,7 +19,15 @@
 (defn acertou-a-palavra-toda? [palavra acertos]
   (empty? (letras-faltantes palavra acertos)))
 
+(defn imprime-forca [vidas palavra acertos]
+  (println "Vidas " vidas)
+  (doseq [letra (seq palavra)]
+    (if (contains? acertos (str letra))
+      (print letra " ") (print "_" " ")))
+  (println))
+
 (defn jogo [vidas palavra acertos]
+  (imprime-forca vidas palavra acertos)
   (cond
     (= vidas 0) (perdeu)
     (acertou-a-palavra-toda? palavra acertos) (ganhou)
@@ -31,24 +41,9 @@
           (println "Errou a letra! Perdeu vida!")
           (recur (dec vidas) palavra acertos))))))
 
-(defn fib [n]
-  (if (or (= n 0) (= n 1)) n
-      (+ (fib (- n 1)) (fib (- n 2)))))
+(defn comeca-o-jogo [] (jogo total-de-vidas palavra-secreta #{}))
 
-(defn fib2 [n]
-  (loop [a 1 b 1 numero 2]
-    (if
-     (= numero n) b
-     (recur b (+ a b) (inc numero)))))
-
-(defn soma [n]
-  (loop [contador 1 soma 0]
-    (if (> contador n) soma
-        (recur (inc contador) (+ contador soma)))))
-
-(defn -main
-  "I don't do a whole lot ... yet."
-  [& args]
-  (println "Hello, World!"))
+(defn -main [& args]
+  (comeca-o-jogo))
 
 ; (require '[forca.core :as forca] :reload)
